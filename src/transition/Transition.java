@@ -35,17 +35,17 @@ public abstract class Transition
 	}
 	
 	//Getter methods
-	protected int getWidth() {return width;}
-	protected int getHeight() {return height;}
-	protected int getSpeed() {return speed;}
-	protected boolean isRunning() {return running;}
-	protected boolean isDone() {return done;}
+	public int getWidth() {return width;}
+	public int getHeight() {return height;}
+	public int getSpeed() {return speed;}
+	public boolean isRunning() {return running;}
+	public boolean isDone() {return done;}
 	
 	//Setter methods
-	protected void setSpeed(int speed) {this.speed = speed;}
-	protected void setRunning(boolean b) {running = b;}
-	protected void setDone(boolean b) {done = b;}
+	public void setSpeed(int speed) {this.speed = speed;}
+	public void setRunning(boolean b) {running = b;}
+	public void setDone(boolean b) {done = b;}
 	
-	protected abstract void update();
-	protected abstract void draw(Graphics2D g);
+	public abstract void update();
+	public abstract void draw(Graphics2D g);
 }
