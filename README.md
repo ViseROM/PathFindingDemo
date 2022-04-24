@@ -11,7 +11,7 @@ Author: Vachia Thoj
 - AI (Critter) moves in left/right/up/down directions. No diagonal movements
 
 
-#### resource folder
+#### resources folder
 - Contains images and map text files
 
 
