@@ -6,7 +6,7 @@ Version/Date: 1.0 - April 2022
 Author: Vachia Thoj
 
 #### Description: 
-- A demo of path finding on tile/grid based map using Breadth First Search (BFS) 
+- A demo of AI path finding on a tile/grid based map using Breadth First Search (BFS) 
 - GUI built using the Swing and AWT libraries in Java
 - AI (Critter) moves in left/right/up/down directions. No diagonal movements
 
