@@ -10,5 +10,16 @@ Author: Vachia Thoj
 - GUI built using the Swing and AWT libraries in Java
 - AI (Critter) moves in left/right/up/down directions. No diagonal movements
 
+#### Source code is divided into the following packages:
+- entity
+- graph
+- helper
+- main
+- manager
+- map
+- state
+- transition
 
-—— To Run Program Using an IDE —— Clone/download the project, then run the Main.java file to start program
+
+—— To Run Program Using an IDE —— Clone/download the project, then run the Main.java file located in the main package
+—— Code was originally written and executed using Eclipse IDE ——
