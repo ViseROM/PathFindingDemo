@@ -1,2 +1,7 @@
 # PathFindingDemo
-A demo of path finding using breadth first search (BFS) on a grid based map
+Project Title: Path Finding Demo
+
+Version/Date: 1.0 - April 2022
+
+Author: Vachia Thoj
+
