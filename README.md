@@ -31,8 +31,8 @@ Author: Vachia Thoj
 
 —— To Run Program Using an IDE —— Clone/download the project, then run the Main.java file located in the main package
 
-—— Code was originally written and executed using the Eclipse IDE ——
+—— Code was originally written and executed using the Eclipse IDE
 
-—— Code that references a file path may need to be modified depending on how the coding environment you used manages folders/directories ——
+—— Code that references a file path may need to be modified depending on how the coding environment you used manages folders/directories
 
-—— There is an executable JAR called "PathFindingDemo.jar" that will run the "end product" of the code ——
+—— There is an executable JAR called "PathFindingDemo.jar" that will run the "end product" of the code (Requires JDK 15.0.2 or newer)
