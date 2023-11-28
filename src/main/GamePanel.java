@@ -65,9 +65,9 @@ public class GamePanel extends JPanel implements Runnable
 			thread.start();
 			
 			//Add a MouseListener
-        	addMouseListener(new MouseAdapter()
+			addMouseListener(new MouseAdapter()
         	{
-        		public void mousePressed(MouseEvent e)
+				public void mousePressed(MouseEvent e)
         		{
         			mouseManager.setPressedPoint(e.getX(), e.getY());
         			mouseManager.setMousePressed(true);
@@ -102,43 +102,42 @@ public class GamePanel extends JPanel implements Runnable
 	{
 		running = true;
         
-        	image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        	g = (Graphics2D) image.getGraphics();
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+        g = (Graphics2D) image.getGraphics();
         
-        	//Add anti-aliasing
-        	g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        	g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        //Add anti-aliasing
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
-        	long start;
-        	long elapsed;
-        	long wait;
+        long start;
+        long elapsed;
+        long wait;
         
-        	//Events to do while thread is running
-        	while(running == true)
-        	{
-        		start = System.nanoTime();
+        //Events to do while thread is running
+        while(running == true)
+        {
+        	start = System.nanoTime();
         	
-            		update();
-            		draw();
-            		drawToScreen();
+            update();
+            draw();
+            drawToScreen();
             
-            		//******* (START) Frame counting *******
+            //******* (START) Frame counting *******
             
-            		elapsed = System.nanoTime() - start;
-            		wait = (TARGET_TIME - elapsed) / 1000000;
-            		if(wait < 0)
-            		{
-            			wait = TARGET_TIME;
-            		}
+            elapsed = (System.nanoTime() - start) / 1000000;
+            wait = TARGET_TIME - elapsed;
+            if(wait < 0)
+            {
+            	wait = TARGET_TIME;
+            }
             
-            
-            		try{
-                		Thread.sleep(wait);
-            		}catch(Exception e){
+            try{
+                Thread.sleep(wait);
+            }catch(Exception e){
                 
-            		}
-           		 //******* (END) Frame counting *******
-        	}
+            }
+            //******* (END) Frame counting *******
+        }
 	}
 	
 	/**
