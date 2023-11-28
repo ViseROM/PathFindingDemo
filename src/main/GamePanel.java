@@ -66,26 +66,26 @@ public class GamePanel extends JPanel implements Runnable
 			
 			//Add a MouseListener
 			addMouseListener(new MouseAdapter()
-        	{
+			{
 				public void mousePressed(MouseEvent e)
-        		{
-        			mouseManager.setPressedPoint(e.getX(), e.getY());
-        			mouseManager.setMousePressed(true);
-        			mouseManager.setMouseReleased(false);
-        		}
+				{
+					mouseManager.setPressedPoint(e.getX(), e.getY());
+					mouseManager.setMousePressed(true);
+					mouseManager.setMouseReleased(false);
+				}
         		
-        		public void mouseReleased(MouseEvent e)
-        		{
-        			mouseManager.setReleasedPoint(e.getX(), e.getY());
-        			mouseManager.setMouseReleased(true);
-        			mouseManager.setMousePressed(false);
-        		}
+				public void mouseReleased(MouseEvent e)
+				{
+					mouseManager.setReleasedPoint(e.getX(), e.getY());
+					mouseManager.setMouseReleased(true);
+					mouseManager.setMousePressed(false);
+				}
         		
-        		public void mouseExited(MouseEvent e)
-        		{
-        			mouseManager.clearCurrentPoint();
-        		}
-        	});
+				public void mouseExited(MouseEvent e)
+				{
+					mouseManager.clearCurrentPoint();
+				}
+			});
         	
         	//Add a MouseMotionListener
         	addMouseMotionListener(new MouseAdapter() 
