@@ -1,13 +1,13 @@
 package entity;
 
-import java.awt.Graphics2D;
-import java.awt.Color;
 import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import graph.*;
 import main.GamePanel;
 import map.TileMap;
-import graph.*;
 
 /**
  * Critter class represents a Critter
@@ -52,11 +52,11 @@ public class Critter extends Entity
 	/**
 	 * Constructor
 	 * 
-	 * @param x integer x coordinate of Critter
-	 * @param y integer y coordinate of Critter
-	 * @param width integer width (pixels) of Critter
-	 * @param height integer height (pixels) of Critter
-	 * @param tileMap a TileMap
+	 * @param x (int) x-coordinate of Critter
+	 * @param y (int) y-coordinate of Critter
+	 * @param width (int) width of the Critter
+	 * @param height (int) height of the Critter
+	 * @param tileMap (TileMap) a TileMap
 	 */
 	public Critter(int x, int y, int width, int height, TileMap tileMap)
 	{
@@ -277,8 +277,8 @@ public class Critter extends Entity
 	
 	/**
 	 * Method that finds a path for Critter to travel
-	 * @param startLocation nodeList start index
-	 * @param endLocation nodeList end index
+	 * @param startLocation (int) nodeList start index
+	 * @param endLocation (int) nodeList end index
 	 */
 	public void findPath(int startLocation, int endLocation)
 	{	
@@ -326,7 +326,7 @@ public class Critter extends Entity
 	
 	/**
 	 * Method that draws the Critter
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	public void draw(Graphics2D g)
 	{

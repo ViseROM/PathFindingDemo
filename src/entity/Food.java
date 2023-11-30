@@ -1,7 +1,7 @@
 package entity;
 
-import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Graphics2D;
 
 /**
  * Food class represents Food
@@ -32,10 +32,10 @@ public class Food extends Entity
 	
 	/**
 	 * Constructor
-	 * @param x integer x coordinate of Food
-	 * @param y integer y coordinate of Food
-	 * @param width integer width (pixels) of Food
-	 * @param height integer height (pixels) of Food
+	 * @param x (int) x-coordinate of Food
+	 * @param y (int) y-coordinate of Food
+	 * @param width (int) width of the Food
+	 * @param height (int) height of the Food
 	 */
 	public Food(int x, int y, int width, int height)
 	{
@@ -94,7 +94,7 @@ public class Food extends Entity
 	
 	/**
 	 * Method that draws the Food
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	public void draw(Graphics2D g)
 	{
