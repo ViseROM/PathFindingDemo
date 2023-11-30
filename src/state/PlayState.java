@@ -200,8 +200,10 @@ public class PlayState extends State
 			Random random = new Random();
 			int x = (random.nextInt(tileMap.getNumCols()));
 			int y = (random.nextInt(tileMap.getNumRows()));
-			food = new Food(x * tileMap.getTileSize(), y * tileMap.getTileSize(), 
-						    tileMap.getTileSize(), tileMap.getTileSize());
+			food = new Food(
+					x * tileMap.getTileSize(), y * tileMap.getTileSize(), 
+					tileMap.getTileSize(), tileMap.getTileSize()
+			);
 			
 			//Make sure Food that is being created is not overlapping Critter
 			//nor overlapping a "blocked" tile
@@ -384,12 +386,14 @@ public class PlayState extends State
 		if(food != null && food.isDoneGrowing() && critter.getRoute() == null)
 		{
 			//Calculate Critter location
-			int critterLocation = (critter.getX() / tileMap.getTileSize())  +
-								  ((critter.getY() / tileMap.getTileSize()) * tileMap.getNumCols());
+			int critterLocation =
+					(critter.getX() / tileMap.getTileSize()) +
+					((critter.getY() / tileMap.getTileSize()) * tileMap.getNumCols());
 			
 			//Calculate Food location
-			int foodLocation = (food.getX() / tileMap.getTileSize()) +
-							   ((food.getY() / tileMap.getTileSize()) * tileMap.getNumCols());
+			int foodLocation =
+					(food.getX() / tileMap.getTileSize()) +
+					((food.getY() / tileMap.getTileSize()) * tileMap.getNumCols());
 			
 			//Calculate a path for Critter to get to Food
 			critter.findPath(critterLocation, foodLocation);
