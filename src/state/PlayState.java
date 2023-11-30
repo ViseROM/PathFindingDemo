@@ -1,18 +1,20 @@
 package state;
 
-import java.awt.Graphics2D;
-import java.util.Random;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
-import main.GamePanel;
+import button.*;
 import entity.*;
-import manager.ImageManager;
-import manager.TransitionManager;
-import map.TileMap;
 import graph.Path;
+import helper.Collision;
 import helper.TextSize;
+import main.GamePanel;
+import manager.ImageManager;
+import manager.MouseManager;
+import map.TileMap;
 import transition.*;
 
 /**
@@ -27,9 +29,6 @@ public class PlayState extends State
 	//To manage images
 	private ImageManager imageManager;
 	
-	//To manage transition
-	private TransitionManager transitionManager;
-	
 	//TileMap
 	private TileMap tileMap;
 	
@@ -43,12 +42,12 @@ public class PlayState extends State
 	private Path path;
 	
 	//Buttons
-	private Button pauseButton;
-	private Button playButton;
-	private Button pathButton;
-	private Button gridButton;
-	private Button speedButton;
-	private Button mapButton;
+	private ImageButton pauseButton;
+	private ImageButton playButton;
+	private ImageButton pathButton;
+	private ImageButton gridButton;
+	private ImageButton speedButton;
+	private ImageButton mapButton;
 	
 	//Speed text
 	private String[] speedText;
@@ -67,6 +66,9 @@ public class PlayState extends State
 	//true if path is being shown otherwise false
 	private boolean showPath;
 	
+	//Transition
+	private HorizontalSplit horizontalSplit;
+	
 	/**
 	 * Constructor
 	 */
@@ -74,22 +76,71 @@ public class PlayState extends State
 	{
 		this.imageManager = ImageManager.instance();
 		
-		this.tileMap = new TileMap("/files/Map1.txt");
-		
-		this.transitionManager = new TransitionManager(tileMap.getWidth(), tileMap.getHeight());
-		this.transitionManager.setTransition(TransitionType.HORIZONTAL_SPLIT);
-		
-		this.critter = new Critter(0, 0, 32, 32, tileMap);
-		
-		this.food = null;
-		
-		this.path = new Path(tileMap);
-		
+		createTileMap();
+		createPath();
+		createCritter();
+		createFood();
 		createButton();
+		createText();
+		createTransitions();
 		
 		this.pause = false;
 		this.showPath = true;
+	}
+	
+////////////////////////////////////////////// CREATE METHODS //////////////////////////////////////////////
+	
+	private void createTileMap()
+	{
+		this.tileMap = new TileMap("/files/Map1.txt");
+	}
+	
+	private void createCritter()
+	{
+		this.critter = new Critter(0, 0, 32, 32, tileMap);
+	}
+	
+	private void createFood()
+	{
+		this.food = null;
+	}
+	
+	private void createPath()
+	{
+		this.path = new Path(tileMap);
+	}
+	
+	private void createButton()
+	{
+		BufferedImage[] buttonImages =  imageManager.getButtonImages();
 		
+		this.pauseButton = new ImageButton(buttonImages[0], buttonImages[1]);
+		this.pauseButton.setX(0);
+		this.pauseButton.setY(GamePanel.HEIGHT - pauseButton.getHeight());
+		
+		this.playButton = new ImageButton(buttonImages[2], buttonImages[3]);
+		this.playButton.setX(0);
+		this.playButton.setY(GamePanel.HEIGHT - pauseButton.getHeight());
+		
+		this.pathButton = new ImageButton(buttonImages[4], buttonImages[5]);
+		this.pathButton.setX(pauseButton.getX() + pauseButton.getWidth());
+		this.pathButton.setY(GamePanel.HEIGHT - pathButton.getHeight());
+		
+		this.gridButton = new ImageButton(buttonImages[6], buttonImages[7]);
+		this.gridButton.setX(pathButton.getX() + pathButton.getWidth());
+		this.gridButton.setY(GamePanel.HEIGHT - gridButton.getHeight());
+		
+		this.speedButton = new ImageButton(buttonImages[8], buttonImages[9]);
+		this.speedButton.setX(GamePanel.WIDTH - (speedButton.getWidth() * 8));
+		this.speedButton.setY(GamePanel.HEIGHT - speedButton.getHeight());
+		
+		this.mapButton = new ImageButton(buttonImages[10], buttonImages[11]);
+		this.mapButton.setX(GamePanel.WIDTH - (mapButton.getWidth() * 4));
+		this.mapButton.setY(GamePanel.HEIGHT - mapButton.getHeight());
+	}
+	
+	private void createText()
+	{
 		this.speedText = new String[3];
 		this.speedText[0] = "SLOW";
 		this.speedText[1] = "NORMAL";
@@ -105,58 +156,9 @@ public class PlayState extends State
 		this.pauseText = "- PAUSED -";
 	}
 	
-	/**
-	 * Method that creates/initializes Buttons
-	 */
-	private void createButton()
+	private void createTransitions()
 	{
-		BufferedImage[] buttonImages =  imageManager.getButtonImages();
-		
-		pauseButton = new Button(buttonImages[0], buttonImages[1]);
-		pauseButton.setX(0);
-		pauseButton.setY(GamePanel.HEIGHT - pauseButton.getHeight());
-		
-		playButton = new Button(buttonImages[2], buttonImages[3]);
-		playButton.setX(0);
-		playButton.setY(GamePanel.HEIGHT - pauseButton.getHeight());
-		
-		pathButton = new Button(buttonImages[4], buttonImages[5]);
-		pathButton.setX(pauseButton.getX() + pauseButton.getWidth());
-		pathButton.setY(GamePanel.HEIGHT - pathButton.getHeight());
-		
-		gridButton = new Button(buttonImages[6], buttonImages[7]);
-		gridButton.setX(pathButton.getX() + pathButton.getWidth());
-		gridButton.setY(GamePanel.HEIGHT - gridButton.getHeight());
-		
-		speedButton = new Button(buttonImages[8], buttonImages[9]);
-		speedButton.setX(GamePanel.WIDTH - (speedButton.getWidth() * 8));
-		speedButton.setY(GamePanel.HEIGHT - speedButton.getHeight());
-		
-		mapButton = new Button(buttonImages[10], buttonImages[11]);
-		mapButton.setX(GamePanel.WIDTH - (mapButton.getWidth() * 4));
-		mapButton.setY(GamePanel.HEIGHT - mapButton.getHeight());
-		
-		buttonImages = null;
-	}
-	
-	/**
-	 * Method that checks for collision between two entities
-	 * Uses AABB collision algorithm
-	 * @param e1 An Entity
-	 * @param e2 An Entity
-	 * @return true if both entities have collided, otherwise false
-	 */
-	private boolean collided(Entity e1, Entity e2)
-	{
-		if(e1.getX() < e2.getX() + e2.getWidth() &&
-		   e1.getX() + e1.getWidth() > e2.getX() &&
-		   e1.getY() < e2.getY() + e2.getHeight() &&
-		   e1.getY() + e1.getHeight() > e2.getY())
-		{
-			return true;
-		}
-		
-		return false;
+		this.horizontalSplit = new HorizontalSplit(tileMap.getWidth(), tileMap.getHeight());
 	}
 	
 	/**
@@ -181,9 +183,9 @@ public class PlayState extends State
 				break;
 		}
 		
-		critter = new Critter(0, 0, 32, 32, tileMap);
-		food = null;
-		path = new Path(tileMap);
+		createCritter();
+		createFood();
+		createPath();
 		currentSpeedText = 1;
 	}
 	
@@ -203,11 +205,21 @@ public class PlayState extends State
 			
 			//Make sure Food that is being created is not overlapping Critter
 			//nor overlapping a "blocked" tile
-			if(collided(critter, food) == false && tileMap.getTile(x, y).isBlocked() == false)
+			if(Collision.aabbCollision(critter, food) == false && tileMap.getTile(x, y).isBlocked() == false)
 			{
 				return;
 			}
 		}
+	}
+	
+////////////////////////////////////////////// UPDATE METHODS //////////////////////////////////////////////
+	
+	/**
+	 * Method that updates the Transitions
+	 */
+	private void updateTransitions()
+	{
+		horizontalSplit.update();
 	}
 	
 	/**
@@ -229,39 +241,48 @@ public class PlayState extends State
 		gridButton.update();
 		speedButton.update();
 		mapButton.update();
+		
+		//Check if an action needs to occur if Button has been clicked
+		performButtonAction();
 	}
 	
 	/**
 	 * Method that performs an action when a Button has been clicked on
 	 */
-	private void buttonActions()
+	private void performButtonAction()
 	{
 		if(pauseButton.isMouseClickingButton() == true)
 		{
+			pauseButton.setMouseClickingButton(false);
+			
 			//Pause
 			pause = true;
-			pauseButton.setMouseClickingButton(false);
 		}
 		else if(playButton.isMouseClickingButton() == true)
 		{
+			playButton.setMouseClickingButton(false);
+			
 			//Play
 			pause = false;
-			playButton.setMouseClickingButton(false);
 		}
 		else if(pathButton.isMouseClickingButton() == true)
 		{
+			pathButton.setMouseClickingButton(false);
+			
 			//Show or hide the path finding route
 			showPath = (!showPath);
-			pathButton.setMouseClickingButton(false);
 		}
 		else if(gridButton.isMouseClickingButton() == true)
 		{
+			gridButton.setMouseClickingButton(false);
+			
 			//Show or hide the grid
 			tileMap.setOutlined((!tileMap.isOutlined()));
-			gridButton.setMouseClickingButton(false);
 		}
 		else if(speedButton.isMouseClickingButton() == true)
 		{
+			speedButton.setMouseClickingButton(false);
+			
 			++currentSpeedText;			
 			if(currentSpeedText >= 3)
 			{
@@ -278,35 +299,41 @@ public class PlayState extends State
 					critter.setSpeed(4);
 					break;
 				case 2:
-					critter.setSpeed(8);
+					critter.setSpeed(16);
 					break;
 				default:
 					break;
 			}
-			
-			speedButton.setMouseClickingButton(false);
 		}
 		else if(mapButton.isMouseClickingButton() == true)
 		{
+			mapButton.setMouseClickingButton(false);
+			
 			++currentMapText;
 			if(currentMapText >= 3)
 			{
 				currentMapText = 0;
 			}
 			
-			//Start transition
-			transitionManager.startTransition();
-			
-			mapButton.setMouseClickingButton(false);
-			
-			//Disable Buttons
-			pauseButton.setDisabled(true);
-			playButton.setDisabled(true);
-			pathButton.setDisabled(true);
-			gridButton.setDisabled(true);
-			speedButton.setDisabled(true);
-			mapButton.setDisabled(true);
+			//Run the horizontalSplit transition
+			horizontalSplit.setRunning(true);
 		}
+	}
+	
+	/**
+	 * Method that updates food
+	 */
+	private void updateFood()
+	{
+		food.update();
+	}
+	
+	/**
+	 * Method that updates Critter
+	 */
+	private void updateCritter()
+	{
+		critter.update();
 	}
 	
 	/**
@@ -314,44 +341,35 @@ public class PlayState extends State
 	 */
 	public void update()
 	{
-		//If the transition is finished
-		if(transitionManager.isDone())
-		{	
-			//Clear transition
-			transitionManager.setCurrentTransition(null);
+		updateTransitions();
+		
+		if(horizontalSplit.isRunning())
+		{
+			return;
+		}
+		
+		//If the transition is finished...
+		if(horizontalSplit.isDone())
+		{
+			MouseManager.instance().clearPressedPoint();
+			MouseManager.instance().clearReleasedPoint();
 			
 			//New Map
 			newMap();
 			
-			//Enable Buttons
-			pauseButton.setDisabled(false);
-			playButton.setDisabled(false);
-			pathButton.setDisabled(false);
-			gridButton.setDisabled(false);
-			speedButton.setDisabled(false);
-			mapButton.setDisabled(false);
-		}
-				
-		if(transitionManager.isRunning())
-		{
-			//Update Transition
-			transitionManager.update();
-			updateButtons();
-			return;
+			//Create a new transition
+			horizontalSplit = new HorizontalSplit(tileMap.getWidth(), tileMap.getHeight());
 		}
 		
 		//Update Button
 		updateButtons();
-		
-		//Perform an action if Button has been clicked
-		buttonActions();
 		
 		if(pause == true)
 		{
 			return;
 		}
 		
-		//If there is no Food on the tileMap
+		//If there is no Food on the tileMap...
 		if(food == null)
 		{
 			//Create new Food
@@ -359,8 +377,7 @@ public class PlayState extends State
 		}
 		else
 		{
-			//Update Food
-			food.update();
+			updateFood();
 		}
 		
 		//Determine and obtain route for Critter to find Food
@@ -381,13 +398,12 @@ public class PlayState extends State
 			path.setRoute(critter.getRoute());
 		}
 		
-		//Update Critter
-		critter.update();
+		updateCritter();
 		
 		if(food != null)
 		{
 			//Check if Critter and Food have collided
-			if(collided(critter, food) == true)
+			if(Collision.aabbCollision(critter, food))
 			{			
 				food = null;
 				critter.highlightCritter();
@@ -395,20 +411,30 @@ public class PlayState extends State
 		}
 	}
 	
+////////////////////////////////////////////// DRAW METHODS //////////////////////////////////////////////
+	
 	/**
 	 * Method that draws the background
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawBackground(Graphics2D g)
 	{
-		//Draw Background
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 	}
 	
 	/**
+	 * Method that draws the tile map
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
+	 */
+	private void drawTileMap(Graphics2D g)
+	{
+		tileMap.draw(g);
+	}
+	
+	/**
 	 * Method that draws the Path
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawPath(Graphics2D g)
 	{
@@ -421,7 +447,7 @@ public class PlayState extends State
 	
 	/**
 	 * Method that draws the Critter 
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawCritter(Graphics2D g)
 	{
@@ -431,7 +457,7 @@ public class PlayState extends State
 	
 	/**
 	 * Method that draws the Food
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawFood(Graphics2D g)
 	{
@@ -444,7 +470,7 @@ public class PlayState extends State
 	
 	/**
 	 * Method that draws the Buttons
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawButtons(Graphics2D g)
 	{
@@ -466,7 +492,7 @@ public class PlayState extends State
 	
 	/**
 	 * Method that draws the Strings
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	private void drawStrings(Graphics2D g)
 	{
@@ -474,66 +500,48 @@ public class PlayState extends State
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Courier New", Font.BOLD, 20));
 		g.drawString(speedText[currentSpeedText], GamePanel.WIDTH - 220, GamePanel.HEIGHT - 10);
-		g.drawString(mapText[currentMapText], GamePanel.WIDTH - 90, GamePanel.HEIGHT - 10);
+		g.drawString(
+				mapText[currentMapText],
+				GamePanel.WIDTH - 90,
+				GamePanel.HEIGHT - 10
+		);
 		
 		if(pause == true)
 		{
 			g.setColor(new Color(34, 177, 76));
 			g.setFont(new Font("Courier New", Font.BOLD, 48));
 			int pauseWidth = TextSize.getTextWidth(pauseText, g);
-			g.drawString(pauseText, (GamePanel.WIDTH / 2) - (pauseWidth / 2), (GamePanel.HEIGHT / 2));
-			
+			g.drawString(
+					pauseText,
+					(GamePanel.WIDTH / 2) - (pauseWidth / 2),
+					(GamePanel.HEIGHT / 2)
+			);
 		}
 	}
 	
 	/**
-	 * Method that draws the Transition
-	 * @param g The Graphics2D object to be drawn on
+	 * Method that draws the Transitions
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
-	private void drawTransition(Graphics2D g)
+	private void drawTransitions(Graphics2D g)
 	{
-		//If transition is running, draw Transition
-		if(transitionManager.isRunning() == true)
-		{
-			transitionManager.draw(g);
-		}
+		horizontalSplit.draw(g);
 	}
 	
 	/**
 	 * Method that draws the PlayState
 	 * 
-	 * @param g The Graphics2D object to be drawn on
+	 * @param g (Graphics2D) The Graphics2D object to be drawn on
 	 */
 	public void draw(Graphics2D g)
 	{
-		//Draw Background
 		drawBackground(g);
-		
-		//Draw tileMap
-		tileMap.draw(g);
-		
-		//Draw path
+		drawTileMap(g);
 		drawPath(g);
-		
-		//Draw critter
 		drawCritter(g);
-		
-		//Draw food
 		drawFood(g);
-		
-		//Draw Buttons
 		drawButtons(g);
-		
-		//Draw Strings
 		drawStrings(g);
-		
-		if(transitionManager.isDone())
-		{
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		}
-		
-		//Draw Transition if necessary
-		drawTransition(g);
+		drawTransitions(g);
 	}
 }
