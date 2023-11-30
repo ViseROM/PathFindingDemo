@@ -1,7 +1,7 @@
 # PathFindingDemo
 Project Title: Path Finding Demo
 
-Version/Date: 1.0 - April 2022
+Version/Date: 1.0
 
 Author: Vachia Thoj
 
@@ -10,15 +10,14 @@ Author: Vachia Thoj
 - GUI built using the Swing and AWT libraries in Java
 - AI (Critter) moves in left/right/up/down directions. No diagonal movements
 
-
 #### resources folder
 - Contains images and map text files
-
 
 #### src folder
 - Contains the source code
 
 #### Source code is divided into the following packages:
+- button
 - entity
 - graph
 - helper
