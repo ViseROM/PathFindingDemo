@@ -54,8 +54,8 @@ public class TileMap
 		this.width = numCols * tileSize;
 		this.height = numRows * tileSize;
 		
-		this.endY = startX + width;
-		this.endX = startY + height;
+		this.endX = startX + width;
+		this.endY = startY + height;
 		
 		this.outlined = true;
 	}
