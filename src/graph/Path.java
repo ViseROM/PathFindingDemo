@@ -1,7 +1,7 @@
 package graph;
 
-import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import map.TileMap;
@@ -19,10 +19,14 @@ public class Path
 	//A route or path of Nodes
 	private ArrayList<Node> route;
 	
+	/**
+	 * Constructor
+	 * @param tileMap (TileMap) A TileMap object
+	 */
 	public Path(TileMap tileMap)
 	{
 		this.tileMap = tileMap;
-		route = null;
+		this.route = null;
 	}
 	
 	public void setRoute(ArrayList<Node> route) {this.route = route;}
@@ -44,7 +48,6 @@ public class Path
 				{
 					g.setColor(new Color(255, 0 ,0, 75));
 					g.fillRect(x, y, tileMap.getTileSize(), tileMap.getTileSize());
-					
 				}
 				
 				if(i > 0 && i != (route.size() - 1))
@@ -52,7 +55,6 @@ public class Path
 					g.setColor(new Color(255, 255, 0, 50));
 					g.fillRect(x, y, tileMap.getTileSize(), tileMap.getTileSize());
 				}
-				
 			}
 		}
 	}

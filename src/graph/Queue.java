@@ -24,6 +24,7 @@ public class Queue
 		this.size = 0;
 	}
 	
+	//Getter methods
 	public ArrayList<Node> getQueue() {return queue;}
 	public int getSize() {return size;}
 	public boolean isEmpty()
@@ -38,7 +39,7 @@ public class Queue
 	
 	/**
 	 * Adds a node to the Queue
-	 * @param node A Node object
+	 * @param node (Node) A Node object
 	 */
 	public void enqueue(Node node)
 	{

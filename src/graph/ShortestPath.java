@@ -25,6 +25,12 @@ public class ShortestPath
 	//A Queue
 	private Queue queue;
 	
+	/**
+	 * Constructor
+	 * @param nodeList (Node[]) An array of Nodes
+	 * @param start (Node) The starting Node
+	 * @param end (Node) The end Node
+	 */
 	public ShortestPath(Node[] nodeList, Node start, Node end)
 	{
 		this.route = new ArrayList<Node>();

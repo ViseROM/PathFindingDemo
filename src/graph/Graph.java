@@ -3,7 +3,7 @@ package graph;
 import map.*;
 
 /**
- * Graph class represents a Graph
+ * Graph class represents a Graph data structure
  * @author Vachia Thoj
  *
  */
@@ -21,7 +21,7 @@ public class Graph
 	/**
 	 * Constructor
 	 * 
-	 * @param tileMap a TileMap; to be converted into a Graph
+	 * @param tileMap (TileMap) a TileMap object; to be converted into a Graph
 	 */
 	public Graph(TileMap tileMap)
 	{
@@ -91,9 +91,9 @@ public class Graph
 	/**
 	 * Method that determines if a tile that is not blocked exists
 	 * 
-	 * @param map the map of Tiles
-	 * @param col integer column index
-	 * @param row integer row index
+	 * @param map (Tile[][]) the map of Tiles
+	 * @param col (int) column index
+	 * @param row (int) row index
 	 * @return true if Tile was found at targeted column and row, otherwise false
 	 */
 	private boolean findTile(Tile[][] map, int col, int row)
