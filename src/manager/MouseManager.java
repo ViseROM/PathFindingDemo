@@ -1,5 +1,7 @@
 package manager;
 
+import entity.Point;
+
 /**
  * MouseManager class keeps track and manages the mouses actions
  * 

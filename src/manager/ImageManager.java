@@ -1,7 +1,6 @@
 package manager;
 
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
 
 /**
